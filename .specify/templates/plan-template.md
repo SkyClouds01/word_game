@@ -1,10 +1,10 @@
-
 # Implementation Plan: [FEATURE]
 
 **Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
 **Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
 
 ## Execution Flow (/plan command scope)
+
 ```
 1. Load feature spec from Input path
    → If not found: ERROR "No feature spec at {path}"
@@ -27,31 +27,84 @@
 ```
 
 **IMPORTANT**: The /plan command STOPS at step 7. Phases 2-4 are executed by other commands:
+
 - Phase 2: /tasks command creates tasks.md
 - Phase 3-4: Implementation execution (manual or via tools)
 
 ## Summary
+
 [Extract from feature spec: primary requirement + technical approach from research]
 
 ## Technical Context
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
+
+**Language/Version**: [e.g., Dart 3.9.2, Flutter 3.35.5 or NEEDS CLARIFICATION]  
+**Primary Dependencies**: [e.g., flutter_bloc, get_it, freezed or NEEDS CLARIFICATION]  
+**Storage**: [if applicable, e.g., Drift (SQLite), Hive, SharedPreferences or N/A]  
+**Testing**: [e.g., flutter_test, mocktail, bloc_test or NEEDS CLARIFICATION]  
+**Target Platform**: [e.g., iOS 13+, Android 8+ (API 26+), Web, Desktop or NEEDS CLARIFICATION]
 **Project Type**: [single/web/mobile - determines source structure]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Performance Goals**: [domain-specific, e.g., 60 fps UI, <3s cold start, <100ms API response or NEEDS CLARIFICATION]  
+**Constraints**: [domain-specific, e.g., offline-first, <50MB app size, WCAG AA compliance or NEEDS CLARIFICATION]  
+**Scale/Scope**: [domain-specific, e.g., 10k users, 100 screens, 1M records locally or NEEDS CLARIFICATION]
 
 ## Constitution Check
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
+
+Verify compliance with constitution principles (v1.0.0):
+
+**I. Test-Driven Development**:
+
+- [ ] TDD approach planned (tests before implementation)
+- [ ] Test categories identified (unit, widget, integration, contract)
+- [ ] Coverage target ≥80% achievable
+
+**II. Clean Architecture Layers**:
+
+- [ ] Feature follows domain/data/presentation structure
+- [ ] Domain layer has no Flutter/external dependencies
+- [ ] Repository interfaces in domain, implementations in data
+- [ ] Use cases are single-responsibility
+
+**III. Code Quality Standards**:
+
+- [ ] Plan follows Dart/Flutter conventions
+- [ ] Public APIs will be documented
+- [ ] Files respect size limits (≤300 lines)
+- [ ] No deep nesting planned (≤3 levels)
+
+**IV. Performance Requirements**:
+
+- [ ] UI performance considered (60fps target)
+- [ ] Heavy computations planned for isolates if needed
+- [ ] Lazy loading planned for large lists
+- [ ] Async operations have timeout configs
+
+**V. User Experience Consistency**:
+
+- [ ] All strings use l10n (no hardcoded text)
+- [ ] Theme values used (no hardcoded colors/styles)
+- [ ] Accessibility considered (labels, contrast, touch targets)
+- [ ] Error handling planned
+
+**VI. Type Safety & Null Safety**:
+
+- [ ] Sound null safety maintained
+- [ ] Type annotations on public APIs
+- [ ] Immutability enforced (Freezed for data models)
+- [ ] No unsafe `!` operators without justification
+
+**VII. Immutability & State Management**:
+
+- [ ] BLoC/Cubit planned for state management
+- [ ] State classes will be immutable (Freezed)
+- [ ] BLoC tests planned independently of UI
+- [ ] Proper disposal planned to prevent leaks
 
 ## Project Structure
 
 ### Documentation (this feature)
+
 ```
 specs/[###-feature]/
 ├── plan.md              # This file (/plan command output)
@@ -63,26 +116,37 @@ specs/[###-feature]/
 ```
 
 ### Source Code (repository root)
+
 <!--
   ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
   for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
+  real paths (e.g., features/game, features/auth). The delivered plan must
   not include Option labels.
 -->
+
 ```
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
-src/
-├── models/
-├── services/
-├── cli/
-└── lib/
+# [REMOVE IF UNUSED] Option 1: Single Flutter app (DEFAULT for mobile)
+lib/
+├── features/
+│   └── [feature]/
+│       ├── domain/           # Entities, repository interfaces, use cases
+│       ├── data/             # Repository implementations, data sources, models
+│       └── presentation/     # Pages, widgets, BLoCs/Cubits
+├── core/
+│   ├── config/               # Theme, routing, env configs
+│   ├── constants/            # App-wide constants
+│   └── misc/                 # Utilities, extensions
+└── app/                      # App initialization, DI setup
 
-tests/
-├── contract/
-├── integration/
-└── unit/
+test/
+├── features/
+│   └── [feature]/
+│       ├── domain/           # Unit tests for use cases
+│       ├── data/             # Contract tests for repositories/data sources
+│       └── presentation/     # Widget tests, BLoC tests
+└── integration/              # End-to-end feature tests
 
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
+# [REMOVE IF UNUSED] Option 2: Flutter app + Backend API (full-stack)
 backend/
 ├── src/
 │   ├── models/
@@ -90,31 +154,38 @@ backend/
 │   └── api/
 └── tests/
 
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
+lib/                          # Flutter app (same structure as Option 1)
+└── [same as above]
 
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
+# [REMOVE IF UNUSED] Option 3: Multi-platform Flutter (shared lib + platform apps)
+packages/
+├── core/                     # Shared business logic
+│   └── lib/
+│       └── features/         # Domain + Data layers
+└── ui_components/            # Shared widgets
 
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+apps/
+├── mobile/                   # Mobile app
+│   └── lib/
+│       └── features/         # Presentation layer only
+└── web/                      # Web app
+    └── lib/
+        └── features/         # Presentation layer only
 ```
 
 **Structure Decision**: [Document the selected structure and reference the real
 directories captured above]
 
 ## Phase 0: Outline & Research
+
 1. **Extract unknowns from Technical Context** above:
+
    - For each NEEDS CLARIFICATION → research task
    - For each dependency → best practices task
    - For each integration → patterns task
 
 2. **Generate and dispatch research agents**:
+
    ```
    For each unknown in Technical Context:
      Task: "Research {unknown} for {feature context}"
@@ -130,24 +201,29 @@ directories captured above]
 **Output**: research.md with all NEEDS CLARIFICATION resolved
 
 ## Phase 1: Design & Contracts
-*Prerequisites: research.md complete*
+
+_Prerequisites: research.md complete_
 
 1. **Extract entities from feature spec** → `data-model.md`:
+
    - Entity name, fields, relationships
    - Validation rules from requirements
    - State transitions if applicable
 
 2. **Generate API contracts** from functional requirements:
+
    - For each user action → endpoint
    - Use standard REST/GraphQL patterns
    - Output OpenAPI/GraphQL schema to `/contracts/`
 
 3. **Generate contract tests** from contracts:
+
    - One test file per endpoint
    - Assert request/response schemas
    - Tests must fail (no implementation yet)
 
 4. **Extract test scenarios** from user stories:
+
    - Each story → integration test scenario
    - Quickstart test = story validation steps
 
@@ -160,21 +236,24 @@ directories captured above]
    - Keep under 150 lines for token efficiency
    - Output to repository root
 
-**Output**: data-model.md, /contracts/*, failing tests, quickstart.md, agent-specific file
+**Output**: data-model.md, /contracts/\*, failing tests, quickstart.md, agent-specific file
 
 ## Phase 2: Task Planning Approach
-*This section describes what the /tasks command will do - DO NOT execute during /plan*
+
+_This section describes what the /tasks command will do - DO NOT execute during /plan_
 
 **Task Generation Strategy**:
+
 - Load `.specify/templates/tasks-template.md` as base
 - Generate tasks from Phase 1 design docs (contracts, data model, quickstart)
 - Each contract → contract test task [P]
-- Each entity → model creation task [P] 
+- Each entity → model creation task [P]
 - Each user story → integration test task
 - Implementation tasks to make tests pass
 
 **Ordering Strategy**:
-- TDD order: Tests before implementation 
+
+- TDD order: Tests before implementation
 - Dependency order: Models before services before UI
 - Mark [P] for parallel execution (independent files)
 
@@ -183,25 +262,28 @@ directories captured above]
 **IMPORTANT**: This phase is executed by the /tasks command, NOT by /plan
 
 ## Phase 3+: Future Implementation
-*These phases are beyond the scope of the /plan command*
+
+_These phases are beyond the scope of the /plan command_
 
 **Phase 3**: Task execution (/tasks command creates tasks.md)  
 **Phase 4**: Implementation (execute tasks.md following constitutional principles)  
 **Phase 5**: Validation (run tests, execute quickstart.md, performance validation)
 
 ## Complexity Tracking
-*Fill ONLY if Constitution Check has violations that must be justified*
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+_Fill ONLY if Constitution Check has violations that must be justified_
 
+| Violation                  | Why Needed         | Simpler Alternative Rejected Because |
+| -------------------------- | ------------------ | ------------------------------------ |
+| [e.g., 4th project]        | [current need]     | [why 3 projects insufficient]        |
+| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient]  |
 
 ## Progress Tracking
-*This checklist is updated during execution flow*
+
+_This checklist is updated during execution flow_
 
 **Phase Status**:
+
 - [ ] Phase 0: Research complete (/plan command)
 - [ ] Phase 1: Design complete (/plan command)
 - [ ] Phase 2: Task planning complete (/plan command - describe approach only)
@@ -210,10 +292,12 @@ directories captured above]
 - [ ] Phase 5: Validation passed
 
 **Gate Status**:
+
 - [ ] Initial Constitution Check: PASS
 - [ ] Post-Design Constitution Check: PASS
 - [ ] All NEEDS CLARIFICATION resolved
 - [ ] Complexity deviations documented
 
 ---
-*Based on Constitution v2.1.1 - See `/memory/constitution.md`*
+
+_Based on Constitution v1.0.0 - See `.specify/memory/constitution.md`_
