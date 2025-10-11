@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:word_game/core/core.dart';
 import 'package:word_game/features/game/bloc/cubit.dart';
 
 class GameKeyboard extends StatelessWidget {
@@ -15,65 +16,77 @@ class GameKeyboard extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: SafeArea(
-        child: Column(
-          spacing: 8,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              spacing: 4,
-              children: firstRow
-                  .map(
-                    (letter) => GameKey(
-                      label: letter,
-                      onTap: () => gameCubit.onGuess(letter),
-                    ),
-                  )
-                  .toList(),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              spacing: 4,
-              children: secondRow
-                  .map(
-                    (letter) => GameKey(
-                      label: letter,
-                      onTap: () => gameCubit.onGuess(letter),
-                    ),
-                  )
-                  .toList(),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              spacing: 4,
-              children: thirdRow
-                  .map(
-                    (letter) => GameKey(
-                      label: letter,
-                      onTap: () => gameCubit.onGuess(letter),
-                    ),
-                  )
-                  .toList(),
-            ),
-            Row(
+        child: BlocBuilder<GameCubit, GameState>(
+          builder: (context, state) {
+            return Column(
+              spacing: 8,
               children: [
-                Expanded(
-                  flex: 2,
-                  child: GameKey(
-                    label: 'BACK',
-                    onTap: gameCubit.onPreviousLetter,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 4,
+                  children: firstRow
+                      .map(
+                        (letter) => GameKey(
+                          label: letter,
+                          status:
+                              state.keyboardStatus[letter] ?? KeyStatus.initial,
+                          onTap: () => gameCubit.onGuess(letter),
+                        ),
+                      )
+                      .toList(),
                 ),
-                const Spacer(),
-                Expanded(
-                  flex: 2,
-                  child: GameKey(
-                    label: 'NEXT',
-                    onTap: gameCubit.onNextLetter,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 4,
+                  children: secondRow
+                      .map(
+                        (letter) => GameKey(
+                          label: letter,
+                          status:
+                              state.keyboardStatus[letter] ?? KeyStatus.initial,
+                          onTap: () => gameCubit.onGuess(letter),
+                        ),
+                      )
+                      .toList(),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 4,
+                  children: thirdRow
+                      .map(
+                        (letter) => GameKey(
+                          label: letter,
+                          status:
+                              state.keyboardStatus[letter] ?? KeyStatus.initial,
+                          onTap: () => gameCubit.onGuess(letter),
+                        ),
+                      )
+                      .toList(),
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: GameKey(
+                        label: 'BACK',
+                        status: KeyStatus.initial,
+                        onTap: gameCubit.onPreviousLetter,
+                      ),
+                    ),
+                    const Spacer(),
+                    Expanded(
+                      flex: 2,
+                      child: GameKey(
+                        label: 'NEXT',
+                        status: KeyStatus.initial,
+                        onTap: gameCubit.onNextLetter,
+                      ),
+                    ),
+                  ],
                 ),
               ],
-            ),
-          ],
+            );
+          },
         ),
       ),
     );
@@ -82,22 +95,35 @@ class GameKeyboard extends StatelessWidget {
 
 class GameKey extends StatelessWidget {
   final String label;
+  final KeyStatus status;
   final VoidCallback? onTap;
 
   const GameKey({
     required this.label,
+    required this.status,
     this.onTap,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    var backgroundColor = Colors.white;
+    var foregroundColor = Colors.black;
+
+    if (status.isActive) {
+      backgroundColor = Colors.green.shade400;
+      foregroundColor = Colors.white;
+    } else if (status.isInactive) {
+      backgroundColor = Colors.grey.shade300;
+      foregroundColor = Colors.black38;
+    }
+
     return Material(
       type: MaterialType.button,
-      color: Colors.white,
+      color: backgroundColor,
       elevation: 2,
-      textStyle: const TextStyle(
-        color: Colors.black,
+      textStyle: TextStyle(
+        color: foregroundColor,
         fontSize: 18,
         fontWeight: FontWeight.bold,
       ),
@@ -106,7 +132,7 @@ class GameKey extends StatelessWidget {
       ),
 
       child: InkWell(
-        onTap: onTap,
+        onTap: status.isInactive ? null : onTap,
         child: Ink(
           height: 48,
           width: 32,

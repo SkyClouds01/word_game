@@ -11,7 +11,6 @@ class GameCubit extends Cubit<GameState> {
   GameCubit() : super(GameState.initial());
 
   void onSetup(String phrase) {
-    // // Get unique letters (excluding spaces and punctuation)
     final upperPhrase = phrase.toUpperCase();
     final letters = upperPhrase
         .split('')
@@ -19,12 +18,13 @@ class GameCubit extends Cubit<GameState> {
         .toSet()
         .toList();
 
-    // Create random number assignments (1-9)
     final availableNumbers = List.generate(26, (i) => i + 1)..shuffle(Random());
     final letterToNumber = <String, int>{};
+    final keyboardStatus = <String, KeyStatus>{};
 
     for (var i = 0; i < letters.length; i++) {
       letterToNumber[letters[i]] = availableNumbers[i];
+      keyboardStatus[letters[i]] = KeyStatus.initial;
     }
 
     final phraseWords = upperPhrase.split(' ');
@@ -38,16 +38,9 @@ class GameCubit extends Cubit<GameState> {
       }).toList();
     }).toList();
 
-    // // Encode the phrase
-    // final encodedPhrase = upperPhrase.split('').map((char) {
-    //   if (letterToNumber.containsKey(char)) {
-    //     return letterToNumber[char]!.toString();
-    //   }
-    //   return char; // Keep spaces and punctuation as-is
-    // }).toList();
-
     final newState = state.copyWith(
       phraseCharacters: phraseLetters,
+      keyboardStatus: keyboardStatus,
     );
     emit(newState);
   }
@@ -121,22 +114,40 @@ class GameCubit extends Cubit<GameState> {
             state.phraseCharacters,
           );
           updatedPhrase[i] = updatedWord;
-          emit(state.copyWith(phraseCharacters: updatedPhrase));
+
+          final newKeyboardStatus = Map<String, KeyStatus>.from(
+            state.keyboardStatus,
+          );
+          final hasMoreLettersToGuess = updatedPhrase.any((word) {
+            return word.any(
+              (char) => char.value == letter && !char.status.isCorrect,
+            );
+          });
+
+          if (isCorrect) {
+            if (hasMoreLettersToGuess) {
+              newKeyboardStatus[letter] = KeyStatus.active;
+            } else {
+              newKeyboardStatus[letter] = KeyStatus.inactive;
+            }
+          }
+
+          final newState = state.copyWith(
+            phraseCharacters: updatedPhrase,
+            keyboardStatus: newKeyboardStatus,
+          );
+          emit(newState);
         }
       }
     }
-    final newState = state.copyWith(
-      phraseCharacters: state.phraseCharacters.map((word) {
-        return word.map((character) {
-          return character == state.activeCharacter ? newGuess : character;
-        }).toList();
-      }).toList(),
-    );
-
-    emit(newState);
 
     if (isCorrect) {
       onNextLetter();
+    } else {
+      final newState = state.copyWith(
+        lives: state.lives - 1,
+      );
+      emit(newState);
     }
   }
 }
