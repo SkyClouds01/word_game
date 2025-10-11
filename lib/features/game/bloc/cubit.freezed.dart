@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$GameState {
 
- String get completePhrase; List<String> get parsedPhrase; List<String> get encodedPhrase; Map<String, int> get letterToNumber; int get activeIndex;
+ List<List<PhraseCharacter>> get phraseCharacters; int get activeWordIndex; int get activeLetterIndex;
 /// Create a copy of GameState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $GameStateCopyWith<GameState> get copyWith => _$GameStateCopyWithImpl<GameState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GameState&&(identical(other.completePhrase, completePhrase) || other.completePhrase == completePhrase)&&const DeepCollectionEquality().equals(other.parsedPhrase, parsedPhrase)&&const DeepCollectionEquality().equals(other.encodedPhrase, encodedPhrase)&&const DeepCollectionEquality().equals(other.letterToNumber, letterToNumber)&&(identical(other.activeIndex, activeIndex) || other.activeIndex == activeIndex));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GameState&&const DeepCollectionEquality().equals(other.phraseCharacters, phraseCharacters)&&(identical(other.activeWordIndex, activeWordIndex) || other.activeWordIndex == activeWordIndex)&&(identical(other.activeLetterIndex, activeLetterIndex) || other.activeLetterIndex == activeLetterIndex));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,completePhrase,const DeepCollectionEquality().hash(parsedPhrase),const DeepCollectionEquality().hash(encodedPhrase),const DeepCollectionEquality().hash(letterToNumber),activeIndex);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(phraseCharacters),activeWordIndex,activeLetterIndex);
 
 @override
 String toString() {
-  return 'GameState(completePhrase: $completePhrase, parsedPhrase: $parsedPhrase, encodedPhrase: $encodedPhrase, letterToNumber: $letterToNumber, activeIndex: $activeIndex)';
+  return 'GameState(phraseCharacters: $phraseCharacters, activeWordIndex: $activeWordIndex, activeLetterIndex: $activeLetterIndex)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $GameStateCopyWith<$Res>  {
   factory $GameStateCopyWith(GameState value, $Res Function(GameState) _then) = _$GameStateCopyWithImpl;
 @useResult
 $Res call({
- String completePhrase, List<String> parsedPhrase, List<String> encodedPhrase, Map<String, int> letterToNumber, int activeIndex
+ List<List<PhraseCharacter>> phraseCharacters, int activeWordIndex, int activeLetterIndex
 });
 
 
@@ -62,13 +62,11 @@ class _$GameStateCopyWithImpl<$Res>
 
 /// Create a copy of GameState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? completePhrase = null,Object? parsedPhrase = null,Object? encodedPhrase = null,Object? letterToNumber = null,Object? activeIndex = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? phraseCharacters = null,Object? activeWordIndex = null,Object? activeLetterIndex = null,}) {
   return _then(_self.copyWith(
-completePhrase: null == completePhrase ? _self.completePhrase : completePhrase // ignore: cast_nullable_to_non_nullable
-as String,parsedPhrase: null == parsedPhrase ? _self.parsedPhrase : parsedPhrase // ignore: cast_nullable_to_non_nullable
-as List<String>,encodedPhrase: null == encodedPhrase ? _self.encodedPhrase : encodedPhrase // ignore: cast_nullable_to_non_nullable
-as List<String>,letterToNumber: null == letterToNumber ? _self.letterToNumber : letterToNumber // ignore: cast_nullable_to_non_nullable
-as Map<String, int>,activeIndex: null == activeIndex ? _self.activeIndex : activeIndex // ignore: cast_nullable_to_non_nullable
+phraseCharacters: null == phraseCharacters ? _self.phraseCharacters : phraseCharacters // ignore: cast_nullable_to_non_nullable
+as List<List<PhraseCharacter>>,activeWordIndex: null == activeWordIndex ? _self.activeWordIndex : activeWordIndex // ignore: cast_nullable_to_non_nullable
+as int,activeLetterIndex: null == activeLetterIndex ? _self.activeLetterIndex : activeLetterIndex // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }
@@ -90,10 +88,10 @@ extension GameStatePatterns on GameState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String completePhrase,  List<String> parsedPhrase,  List<String> encodedPhrase,  Map<String, int> letterToNumber,  int activeIndex)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<List<PhraseCharacter>> phraseCharacters,  int activeWordIndex,  int activeLetterIndex)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GameState() when $default != null:
-return $default(_that.completePhrase,_that.parsedPhrase,_that.encodedPhrase,_that.letterToNumber,_that.activeIndex);case _:
+return $default(_that.phraseCharacters,_that.activeWordIndex,_that.activeLetterIndex);case _:
   return orElse();
 
 }
@@ -111,10 +109,10 @@ return $default(_that.completePhrase,_that.parsedPhrase,_that.encodedPhrase,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String completePhrase,  List<String> parsedPhrase,  List<String> encodedPhrase,  Map<String, int> letterToNumber,  int activeIndex)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<List<PhraseCharacter>> phraseCharacters,  int activeWordIndex,  int activeLetterIndex)  $default,) {final _that = this;
 switch (_that) {
 case _GameState():
-return $default(_that.completePhrase,_that.parsedPhrase,_that.encodedPhrase,_that.letterToNumber,_that.activeIndex);case _:
+return $default(_that.phraseCharacters,_that.activeWordIndex,_that.activeLetterIndex);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -131,10 +129,10 @@ return $default(_that.completePhrase,_that.parsedPhrase,_that.encodedPhrase,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String completePhrase,  List<String> parsedPhrase,  List<String> encodedPhrase,  Map<String, int> letterToNumber,  int activeIndex)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<List<PhraseCharacter>> phraseCharacters,  int activeWordIndex,  int activeLetterIndex)?  $default,) {final _that = this;
 switch (_that) {
 case _GameState() when $default != null:
-return $default(_that.completePhrase,_that.parsedPhrase,_that.encodedPhrase,_that.letterToNumber,_that.activeIndex);case _:
+return $default(_that.phraseCharacters,_that.activeWordIndex,_that.activeLetterIndex);case _:
   return null;
 
 }
@@ -145,33 +143,19 @@ return $default(_that.completePhrase,_that.parsedPhrase,_that.encodedPhrase,_tha
 /// @nodoc
 
 
-class _GameState implements GameState {
-  const _GameState({required this.completePhrase, required final  List<String> parsedPhrase, required final  List<String> encodedPhrase, required final  Map<String, int> letterToNumber, required this.activeIndex}): _parsedPhrase = parsedPhrase,_encodedPhrase = encodedPhrase,_letterToNumber = letterToNumber;
+class _GameState extends GameState {
+  const _GameState({required final  List<List<PhraseCharacter>> phraseCharacters, required this.activeWordIndex, required this.activeLetterIndex}): _phraseCharacters = phraseCharacters,super._();
   
 
-@override final  String completePhrase;
- final  List<String> _parsedPhrase;
-@override List<String> get parsedPhrase {
-  if (_parsedPhrase is EqualUnmodifiableListView) return _parsedPhrase;
+ final  List<List<PhraseCharacter>> _phraseCharacters;
+@override List<List<PhraseCharacter>> get phraseCharacters {
+  if (_phraseCharacters is EqualUnmodifiableListView) return _phraseCharacters;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_parsedPhrase);
+  return EqualUnmodifiableListView(_phraseCharacters);
 }
 
- final  List<String> _encodedPhrase;
-@override List<String> get encodedPhrase {
-  if (_encodedPhrase is EqualUnmodifiableListView) return _encodedPhrase;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_encodedPhrase);
-}
-
- final  Map<String, int> _letterToNumber;
-@override Map<String, int> get letterToNumber {
-  if (_letterToNumber is EqualUnmodifiableMapView) return _letterToNumber;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableMapView(_letterToNumber);
-}
-
-@override final  int activeIndex;
+@override final  int activeWordIndex;
+@override final  int activeLetterIndex;
 
 /// Create a copy of GameState
 /// with the given fields replaced by the non-null parameter values.
@@ -183,16 +167,16 @@ _$GameStateCopyWith<_GameState> get copyWith => __$GameStateCopyWithImpl<_GameSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GameState&&(identical(other.completePhrase, completePhrase) || other.completePhrase == completePhrase)&&const DeepCollectionEquality().equals(other._parsedPhrase, _parsedPhrase)&&const DeepCollectionEquality().equals(other._encodedPhrase, _encodedPhrase)&&const DeepCollectionEquality().equals(other._letterToNumber, _letterToNumber)&&(identical(other.activeIndex, activeIndex) || other.activeIndex == activeIndex));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GameState&&const DeepCollectionEquality().equals(other._phraseCharacters, _phraseCharacters)&&(identical(other.activeWordIndex, activeWordIndex) || other.activeWordIndex == activeWordIndex)&&(identical(other.activeLetterIndex, activeLetterIndex) || other.activeLetterIndex == activeLetterIndex));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,completePhrase,const DeepCollectionEquality().hash(_parsedPhrase),const DeepCollectionEquality().hash(_encodedPhrase),const DeepCollectionEquality().hash(_letterToNumber),activeIndex);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_phraseCharacters),activeWordIndex,activeLetterIndex);
 
 @override
 String toString() {
-  return 'GameState(completePhrase: $completePhrase, parsedPhrase: $parsedPhrase, encodedPhrase: $encodedPhrase, letterToNumber: $letterToNumber, activeIndex: $activeIndex)';
+  return 'GameState(phraseCharacters: $phraseCharacters, activeWordIndex: $activeWordIndex, activeLetterIndex: $activeLetterIndex)';
 }
 
 
@@ -203,7 +187,7 @@ abstract mixin class _$GameStateCopyWith<$Res> implements $GameStateCopyWith<$Re
   factory _$GameStateCopyWith(_GameState value, $Res Function(_GameState) _then) = __$GameStateCopyWithImpl;
 @override @useResult
 $Res call({
- String completePhrase, List<String> parsedPhrase, List<String> encodedPhrase, Map<String, int> letterToNumber, int activeIndex
+ List<List<PhraseCharacter>> phraseCharacters, int activeWordIndex, int activeLetterIndex
 });
 
 
@@ -220,13 +204,210 @@ class __$GameStateCopyWithImpl<$Res>
 
 /// Create a copy of GameState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? completePhrase = null,Object? parsedPhrase = null,Object? encodedPhrase = null,Object? letterToNumber = null,Object? activeIndex = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? phraseCharacters = null,Object? activeWordIndex = null,Object? activeLetterIndex = null,}) {
   return _then(_GameState(
-completePhrase: null == completePhrase ? _self.completePhrase : completePhrase // ignore: cast_nullable_to_non_nullable
-as String,parsedPhrase: null == parsedPhrase ? _self._parsedPhrase : parsedPhrase // ignore: cast_nullable_to_non_nullable
-as List<String>,encodedPhrase: null == encodedPhrase ? _self._encodedPhrase : encodedPhrase // ignore: cast_nullable_to_non_nullable
-as List<String>,letterToNumber: null == letterToNumber ? _self._letterToNumber : letterToNumber // ignore: cast_nullable_to_non_nullable
-as Map<String, int>,activeIndex: null == activeIndex ? _self.activeIndex : activeIndex // ignore: cast_nullable_to_non_nullable
+phraseCharacters: null == phraseCharacters ? _self._phraseCharacters : phraseCharacters // ignore: cast_nullable_to_non_nullable
+as List<List<PhraseCharacter>>,activeWordIndex: null == activeWordIndex ? _self.activeWordIndex : activeWordIndex // ignore: cast_nullable_to_non_nullable
+as int,activeLetterIndex: null == activeLetterIndex ? _self.activeLetterIndex : activeLetterIndex // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+
+}
+
+/// @nodoc
+mixin _$PhraseCharacter {
+
+ String get value; String get guess; int get code;
+/// Create a copy of PhraseCharacter
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PhraseCharacterCopyWith<PhraseCharacter> get copyWith => _$PhraseCharacterCopyWithImpl<PhraseCharacter>(this as PhraseCharacter, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PhraseCharacter&&(identical(other.value, value) || other.value == value)&&(identical(other.guess, guess) || other.guess == guess)&&(identical(other.code, code) || other.code == code));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,value,guess,code);
+
+@override
+String toString() {
+  return 'PhraseCharacter(value: $value, guess: $guess, code: $code)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PhraseCharacterCopyWith<$Res>  {
+  factory $PhraseCharacterCopyWith(PhraseCharacter value, $Res Function(PhraseCharacter) _then) = _$PhraseCharacterCopyWithImpl;
+@useResult
+$Res call({
+ String value, String guess, int code
+});
+
+
+
+
+}
+/// @nodoc
+class _$PhraseCharacterCopyWithImpl<$Res>
+    implements $PhraseCharacterCopyWith<$Res> {
+  _$PhraseCharacterCopyWithImpl(this._self, this._then);
+
+  final PhraseCharacter _self;
+  final $Res Function(PhraseCharacter) _then;
+
+/// Create a copy of PhraseCharacter
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? value = null,Object? guess = null,Object? code = null,}) {
+  return _then(_self.copyWith(
+value: null == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
+as String,guess: null == guess ? _self.guess : guess // ignore: cast_nullable_to_non_nullable
+as String,code: null == code ? _self.code : code // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [PhraseCharacter].
+extension PhraseCharacterPatterns on PhraseCharacter {
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String value,  String guess,  int code)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _PhraseCharacter() when $default != null:
+return $default(_that.value,_that.guess,_that.code);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String value,  String guess,  int code)  $default,) {final _that = this;
+switch (_that) {
+case _PhraseCharacter():
+return $default(_that.value,_that.guess,_that.code);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String value,  String guess,  int code)?  $default,) {final _that = this;
+switch (_that) {
+case _PhraseCharacter() when $default != null:
+return $default(_that.value,_that.guess,_that.code);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _PhraseCharacter extends PhraseCharacter {
+  const _PhraseCharacter({required this.value, required this.guess, required this.code}): super._();
+  
+
+@override final  String value;
+@override final  String guess;
+@override final  int code;
+
+/// Create a copy of PhraseCharacter
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$PhraseCharacterCopyWith<_PhraseCharacter> get copyWith => __$PhraseCharacterCopyWithImpl<_PhraseCharacter>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PhraseCharacter&&(identical(other.value, value) || other.value == value)&&(identical(other.guess, guess) || other.guess == guess)&&(identical(other.code, code) || other.code == code));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,value,guess,code);
+
+@override
+String toString() {
+  return 'PhraseCharacter(value: $value, guess: $guess, code: $code)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$PhraseCharacterCopyWith<$Res> implements $PhraseCharacterCopyWith<$Res> {
+  factory _$PhraseCharacterCopyWith(_PhraseCharacter value, $Res Function(_PhraseCharacter) _then) = __$PhraseCharacterCopyWithImpl;
+@override @useResult
+$Res call({
+ String value, String guess, int code
+});
+
+
+
+
+}
+/// @nodoc
+class __$PhraseCharacterCopyWithImpl<$Res>
+    implements _$PhraseCharacterCopyWith<$Res> {
+  __$PhraseCharacterCopyWithImpl(this._self, this._then);
+
+  final _PhraseCharacter _self;
+  final $Res Function(_PhraseCharacter) _then;
+
+/// Create a copy of PhraseCharacter
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? value = null,Object? guess = null,Object? code = null,}) {
+  return _then(_PhraseCharacter(
+value: null == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
+as String,guess: null == guess ? _self.guess : guess // ignore: cast_nullable_to_non_nullable
+as String,code: null == code ? _self.code : code // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }

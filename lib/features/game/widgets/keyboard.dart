@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:word_game/features/game/bloc/cubit.dart';
 
 class GameKeyboard extends StatelessWidget {
   const GameKeyboard({super.key});
@@ -8,6 +10,7 @@ class GameKeyboard extends StatelessWidget {
     const firstRow = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
     const secondRow = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
     const thirdRow = ['Z', 'X', 'C', 'V', 'B', 'N', 'M'];
+    final gameCubit = context.read<GameCubit>();
 
     return SizedBox(
       width: double.infinity,
@@ -19,33 +22,54 @@ class GameKeyboard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: 4,
               children: firstRow
-                  .map((letter) => GameKey(label: letter))
+                  .map(
+                    (letter) => GameKey(
+                      label: letter,
+                      onTap: () => gameCubit.onGuess(letter),
+                    ),
+                  )
                   .toList(),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: 4,
               children: secondRow
-                  .map((letter) => GameKey(label: letter))
+                  .map(
+                    (letter) => GameKey(
+                      label: letter,
+                      onTap: () => gameCubit.onGuess(letter),
+                    ),
+                  )
                   .toList(),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: 4,
               children: thirdRow
-                  .map((letter) => GameKey(label: letter))
+                  .map(
+                    (letter) => GameKey(
+                      label: letter,
+                      onTap: () => gameCubit.onGuess(letter),
+                    ),
+                  )
                   .toList(),
             ),
-            const Row(
+            Row(
               children: [
                 Expanded(
                   flex: 2,
-                  child: GameKey(label: 'BACK'),
+                  child: GameKey(
+                    label: 'BACK',
+                    onTap: gameCubit.onPreviousLetter,
+                  ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Expanded(
                   flex: 2,
-                  child: GameKey(label: 'NEXT'),
+                  child: GameKey(
+                    label: 'NEXT',
+                    onTap: gameCubit.onNextLetter,
+                  ),
                 ),
               ],
             ),
@@ -58,9 +82,11 @@ class GameKeyboard extends StatelessWidget {
 
 class GameKey extends StatelessWidget {
   final String label;
+  final VoidCallback? onTap;
 
   const GameKey({
     required this.label,
+    this.onTap,
     super.key,
   });
 
@@ -80,7 +106,7 @@ class GameKey extends StatelessWidget {
       ),
 
       child: InkWell(
-        onTap: () => print('Key pressed: $label'),
+        onTap: onTap,
         child: Ink(
           height: 48,
           width: 32,
