@@ -3,14 +3,18 @@ part of 'cubit.dart';
 @freezed
 abstract class GameState with _$GameState {
   const factory GameState({
+    required int lives,
     required List<List<PhraseCharacter>> phraseCharacters,
+    required Map<String, KeyStatus> keyboardStatus,
     required int activeWordIndex,
     required int activeLetterIndex,
   }) = _GameState;
 
   factory GameState.initial() {
     return const GameState(
+      lives: 3,
       phraseCharacters: [],
+      keyboardStatus: {},
       activeWordIndex: 0,
       activeLetterIndex: 0,
     );
@@ -24,6 +28,14 @@ abstract class GameState with _$GameState {
 
   bool isActiveCharacter(int wordIndex, int letterIndex) {
     return wordIndex == activeWordIndex && letterIndex == activeLetterIndex;
+  }
+
+  bool get isGameOver {
+    return lives <= 0;
+  }
+
+  bool get isCompleted {
+    return keyboardStatus.values.every((status) => status.isInactive);
   }
 }
 

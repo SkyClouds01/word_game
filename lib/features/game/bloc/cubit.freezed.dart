@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$GameState {
 
- List<List<PhraseCharacter>> get phraseCharacters; int get activeWordIndex; int get activeLetterIndex;
+ int get lives; List<List<PhraseCharacter>> get phraseCharacters; Map<String, KeyStatus> get keyboardStatus; int get activeWordIndex; int get activeLetterIndex;
 /// Create a copy of GameState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $GameStateCopyWith<GameState> get copyWith => _$GameStateCopyWithImpl<GameState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GameState&&const DeepCollectionEquality().equals(other.phraseCharacters, phraseCharacters)&&(identical(other.activeWordIndex, activeWordIndex) || other.activeWordIndex == activeWordIndex)&&(identical(other.activeLetterIndex, activeLetterIndex) || other.activeLetterIndex == activeLetterIndex));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GameState&&(identical(other.lives, lives) || other.lives == lives)&&const DeepCollectionEquality().equals(other.phraseCharacters, phraseCharacters)&&const DeepCollectionEquality().equals(other.keyboardStatus, keyboardStatus)&&(identical(other.activeWordIndex, activeWordIndex) || other.activeWordIndex == activeWordIndex)&&(identical(other.activeLetterIndex, activeLetterIndex) || other.activeLetterIndex == activeLetterIndex));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(phraseCharacters),activeWordIndex,activeLetterIndex);
+int get hashCode => Object.hash(runtimeType,lives,const DeepCollectionEquality().hash(phraseCharacters),const DeepCollectionEquality().hash(keyboardStatus),activeWordIndex,activeLetterIndex);
 
 @override
 String toString() {
-  return 'GameState(phraseCharacters: $phraseCharacters, activeWordIndex: $activeWordIndex, activeLetterIndex: $activeLetterIndex)';
+  return 'GameState(lives: $lives, phraseCharacters: $phraseCharacters, keyboardStatus: $keyboardStatus, activeWordIndex: $activeWordIndex, activeLetterIndex: $activeLetterIndex)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $GameStateCopyWith<$Res>  {
   factory $GameStateCopyWith(GameState value, $Res Function(GameState) _then) = _$GameStateCopyWithImpl;
 @useResult
 $Res call({
- List<List<PhraseCharacter>> phraseCharacters, int activeWordIndex, int activeLetterIndex
+ int lives, List<List<PhraseCharacter>> phraseCharacters, Map<String, KeyStatus> keyboardStatus, int activeWordIndex, int activeLetterIndex
 });
 
 
@@ -62,10 +62,12 @@ class _$GameStateCopyWithImpl<$Res>
 
 /// Create a copy of GameState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? phraseCharacters = null,Object? activeWordIndex = null,Object? activeLetterIndex = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? lives = null,Object? phraseCharacters = null,Object? keyboardStatus = null,Object? activeWordIndex = null,Object? activeLetterIndex = null,}) {
   return _then(_self.copyWith(
-phraseCharacters: null == phraseCharacters ? _self.phraseCharacters : phraseCharacters // ignore: cast_nullable_to_non_nullable
-as List<List<PhraseCharacter>>,activeWordIndex: null == activeWordIndex ? _self.activeWordIndex : activeWordIndex // ignore: cast_nullable_to_non_nullable
+lives: null == lives ? _self.lives : lives // ignore: cast_nullable_to_non_nullable
+as int,phraseCharacters: null == phraseCharacters ? _self.phraseCharacters : phraseCharacters // ignore: cast_nullable_to_non_nullable
+as List<List<PhraseCharacter>>,keyboardStatus: null == keyboardStatus ? _self.keyboardStatus : keyboardStatus // ignore: cast_nullable_to_non_nullable
+as Map<String, KeyStatus>,activeWordIndex: null == activeWordIndex ? _self.activeWordIndex : activeWordIndex // ignore: cast_nullable_to_non_nullable
 as int,activeLetterIndex: null == activeLetterIndex ? _self.activeLetterIndex : activeLetterIndex // ignore: cast_nullable_to_non_nullable
 as int,
   ));
@@ -88,10 +90,10 @@ extension GameStatePatterns on GameState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<List<PhraseCharacter>> phraseCharacters,  int activeWordIndex,  int activeLetterIndex)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int lives,  List<List<PhraseCharacter>> phraseCharacters,  Map<String, KeyStatus> keyboardStatus,  int activeWordIndex,  int activeLetterIndex)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GameState() when $default != null:
-return $default(_that.phraseCharacters,_that.activeWordIndex,_that.activeLetterIndex);case _:
+return $default(_that.lives,_that.phraseCharacters,_that.keyboardStatus,_that.activeWordIndex,_that.activeLetterIndex);case _:
   return orElse();
 
 }
@@ -109,10 +111,10 @@ return $default(_that.phraseCharacters,_that.activeWordIndex,_that.activeLetterI
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<List<PhraseCharacter>> phraseCharacters,  int activeWordIndex,  int activeLetterIndex)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int lives,  List<List<PhraseCharacter>> phraseCharacters,  Map<String, KeyStatus> keyboardStatus,  int activeWordIndex,  int activeLetterIndex)  $default,) {final _that = this;
 switch (_that) {
 case _GameState():
-return $default(_that.phraseCharacters,_that.activeWordIndex,_that.activeLetterIndex);case _:
+return $default(_that.lives,_that.phraseCharacters,_that.keyboardStatus,_that.activeWordIndex,_that.activeLetterIndex);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -129,10 +131,10 @@ return $default(_that.phraseCharacters,_that.activeWordIndex,_that.activeLetterI
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<List<PhraseCharacter>> phraseCharacters,  int activeWordIndex,  int activeLetterIndex)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int lives,  List<List<PhraseCharacter>> phraseCharacters,  Map<String, KeyStatus> keyboardStatus,  int activeWordIndex,  int activeLetterIndex)?  $default,) {final _that = this;
 switch (_that) {
 case _GameState() when $default != null:
-return $default(_that.phraseCharacters,_that.activeWordIndex,_that.activeLetterIndex);case _:
+return $default(_that.lives,_that.phraseCharacters,_that.keyboardStatus,_that.activeWordIndex,_that.activeLetterIndex);case _:
   return null;
 
 }
@@ -144,14 +146,22 @@ return $default(_that.phraseCharacters,_that.activeWordIndex,_that.activeLetterI
 
 
 class _GameState extends GameState {
-  const _GameState({required final  List<List<PhraseCharacter>> phraseCharacters, required this.activeWordIndex, required this.activeLetterIndex}): _phraseCharacters = phraseCharacters,super._();
+  const _GameState({required this.lives, required final  List<List<PhraseCharacter>> phraseCharacters, required final  Map<String, KeyStatus> keyboardStatus, required this.activeWordIndex, required this.activeLetterIndex}): _phraseCharacters = phraseCharacters,_keyboardStatus = keyboardStatus,super._();
   
 
+@override final  int lives;
  final  List<List<PhraseCharacter>> _phraseCharacters;
 @override List<List<PhraseCharacter>> get phraseCharacters {
   if (_phraseCharacters is EqualUnmodifiableListView) return _phraseCharacters;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_phraseCharacters);
+}
+
+ final  Map<String, KeyStatus> _keyboardStatus;
+@override Map<String, KeyStatus> get keyboardStatus {
+  if (_keyboardStatus is EqualUnmodifiableMapView) return _keyboardStatus;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_keyboardStatus);
 }
 
 @override final  int activeWordIndex;
@@ -167,16 +177,16 @@ _$GameStateCopyWith<_GameState> get copyWith => __$GameStateCopyWithImpl<_GameSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GameState&&const DeepCollectionEquality().equals(other._phraseCharacters, _phraseCharacters)&&(identical(other.activeWordIndex, activeWordIndex) || other.activeWordIndex == activeWordIndex)&&(identical(other.activeLetterIndex, activeLetterIndex) || other.activeLetterIndex == activeLetterIndex));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GameState&&(identical(other.lives, lives) || other.lives == lives)&&const DeepCollectionEquality().equals(other._phraseCharacters, _phraseCharacters)&&const DeepCollectionEquality().equals(other._keyboardStatus, _keyboardStatus)&&(identical(other.activeWordIndex, activeWordIndex) || other.activeWordIndex == activeWordIndex)&&(identical(other.activeLetterIndex, activeLetterIndex) || other.activeLetterIndex == activeLetterIndex));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_phraseCharacters),activeWordIndex,activeLetterIndex);
+int get hashCode => Object.hash(runtimeType,lives,const DeepCollectionEquality().hash(_phraseCharacters),const DeepCollectionEquality().hash(_keyboardStatus),activeWordIndex,activeLetterIndex);
 
 @override
 String toString() {
-  return 'GameState(phraseCharacters: $phraseCharacters, activeWordIndex: $activeWordIndex, activeLetterIndex: $activeLetterIndex)';
+  return 'GameState(lives: $lives, phraseCharacters: $phraseCharacters, keyboardStatus: $keyboardStatus, activeWordIndex: $activeWordIndex, activeLetterIndex: $activeLetterIndex)';
 }
 
 
@@ -187,7 +197,7 @@ abstract mixin class _$GameStateCopyWith<$Res> implements $GameStateCopyWith<$Re
   factory _$GameStateCopyWith(_GameState value, $Res Function(_GameState) _then) = __$GameStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<List<PhraseCharacter>> phraseCharacters, int activeWordIndex, int activeLetterIndex
+ int lives, List<List<PhraseCharacter>> phraseCharacters, Map<String, KeyStatus> keyboardStatus, int activeWordIndex, int activeLetterIndex
 });
 
 
@@ -204,10 +214,12 @@ class __$GameStateCopyWithImpl<$Res>
 
 /// Create a copy of GameState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? phraseCharacters = null,Object? activeWordIndex = null,Object? activeLetterIndex = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? lives = null,Object? phraseCharacters = null,Object? keyboardStatus = null,Object? activeWordIndex = null,Object? activeLetterIndex = null,}) {
   return _then(_GameState(
-phraseCharacters: null == phraseCharacters ? _self._phraseCharacters : phraseCharacters // ignore: cast_nullable_to_non_nullable
-as List<List<PhraseCharacter>>,activeWordIndex: null == activeWordIndex ? _self.activeWordIndex : activeWordIndex // ignore: cast_nullable_to_non_nullable
+lives: null == lives ? _self.lives : lives // ignore: cast_nullable_to_non_nullable
+as int,phraseCharacters: null == phraseCharacters ? _self._phraseCharacters : phraseCharacters // ignore: cast_nullable_to_non_nullable
+as List<List<PhraseCharacter>>,keyboardStatus: null == keyboardStatus ? _self._keyboardStatus : keyboardStatus // ignore: cast_nullable_to_non_nullable
+as Map<String, KeyStatus>,activeWordIndex: null == activeWordIndex ? _self.activeWordIndex : activeWordIndex // ignore: cast_nullable_to_non_nullable
 as int,activeLetterIndex: null == activeLetterIndex ? _self.activeLetterIndex : activeLetterIndex // ignore: cast_nullable_to_non_nullable
 as int,
   ));

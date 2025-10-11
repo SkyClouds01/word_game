@@ -10,8 +10,7 @@ class GameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const phrase =
-        'This is a large phrase to complete please let me finish this project';
+    const phrase = 'This is a large phrase ';
 
     return BlocProvider(
       create: (context) => GameCubit()..onSetup(phrase),
@@ -19,7 +18,21 @@ class GameScreen extends StatelessWidget {
         backgroundColor: Colors.indigo.shade100,
         appBar: AppBar(
           backgroundColor: Colors.indigo.shade300,
-          title: const Text('Phrases Screen'),
+          title: BlocBuilder<GameCubit, GameState>(
+            builder: (context, state) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(3, (index) {
+                  return Icon(
+                    index < state.lives
+                        ? Icons.favorite
+                        : Icons.favorite_border,
+                    color: Colors.red,
+                  );
+                }),
+              );
+            },
+          ),
         ),
         body: const SafeArea(
           child: Padding(

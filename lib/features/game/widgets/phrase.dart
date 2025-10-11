@@ -45,6 +45,9 @@ class GamePhrase extends StatelessWidget {
                       value: value.value,
                       code: value.code.toString(),
                       status: status,
+                      isCompleted:
+                          state.keyboardStatus[value.value]?.isInactive ??
+                          false,
                       onTap: () => context.read<GameCubit>().onFocusLetter(
                         wordIndex,
                         characterIndex,
@@ -65,12 +68,14 @@ class CharacterField extends StatelessWidget {
   final String value;
   final String code;
   final CharacterStatus status;
+  final bool isCompleted;
   final VoidCallback? onTap;
 
   const CharacterField({
     required this.value,
     required this.code,
     this.status = CharacterStatus.initial,
+    this.isCompleted = false,
     this.onTap,
     super.key,
   });
@@ -90,11 +95,6 @@ class CharacterField extends StatelessWidget {
       decoration = decoration.copyWith(
         color: Colors.red.shade100,
         border: Border.all(color: Colors.red, width: 2),
-      );
-    } else if (status.isCorrect) {
-      decoration = decoration.copyWith(
-        color: Colors.green.shade100,
-        border: Border.all(color: Colors.green, width: 2),
       );
     }
 
@@ -121,7 +121,7 @@ class CharacterField extends StatelessWidget {
               height: 1,
             ),
             Text(
-              code,
+              isCompleted ? '' : code,
               style: const TextStyle(
                 fontSize: 10,
                 letterSpacing: 0.8,
