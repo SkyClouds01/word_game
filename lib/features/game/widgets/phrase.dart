@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:word_game/core/core.dart';
 import 'package:word_game/features/game/bloc/cubit.dart';
 
 class GamePhrase extends StatelessWidget {
@@ -11,12 +12,14 @@ class GamePhrase extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: BlocBuilder<GameCubit, GameState>(
         builder: (context, state) {
-          final words = state.completePhrase.split(' ');
           return Wrap(
             alignment: WrapAlignment.center,
             spacing: 16,
             runSpacing: 16,
-            children: words.map((word) {
+            children: state.phraseCharacters.asMap().entries.map((entry) {
+              final wordIndex = entry.key;
+              final word = entry.value;
+
               return Container(
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
@@ -26,19 +29,28 @@ class GamePhrase extends StatelessWidget {
 
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: word.split('').map(
-                    (letter) {
-                      var status = LetterStatus.initial;
-                      if (state.activeIndex == 0) {
-                        status = LetterStatus.focused;
-                      }
+                  children: word.asMap().entries.map((character) {
+                    final characterIndex = character.key;
+                    final value = character.value;
+                    final isActive = state.isActiveCharacter(
+                      wordIndex,
+                      characterIndex,
+                    );
+                    var status = value.status;
+                    if (isActive) {
+                      status = CharacterStatus.focused;
+                    }
 
-                      return LetterField(
-                        value: letter,
-                        status: status,
-                      );
-                    },
-                  ).toList(),
+                    return CharacterField(
+                      value: value.value,
+                      code: value.code.toString(),
+                      status: status,
+                      onTap: () => context.read<GameCubit>().onFocusLetter(
+                        wordIndex,
+                        characterIndex,
+                      ),
+                    );
+                  }).toList(),
                 ),
               );
             }).toList(),
@@ -49,30 +61,17 @@ class GamePhrase extends StatelessWidget {
   }
 }
 
-enum LetterStatus {
-  initial,
-  focused,
-  incorrect,
-  correct;
-
-  bool get isInitial => this == LetterStatus.initial;
-
-  bool get isFocused => this == LetterStatus.focused;
-
-  bool get isIncorrect => this == LetterStatus.incorrect;
-
-  bool get isCorrect => this == LetterStatus.correct;
-}
-
-class LetterField extends StatelessWidget {
+class CharacterField extends StatelessWidget {
   final String value;
-  final String encryptedValue;
-  final LetterStatus status;
+  final String code;
+  final CharacterStatus status;
+  final VoidCallback? onTap;
 
-  const LetterField({
+  const CharacterField({
     required this.value,
-    this.encryptedValue = '31',
-    this.status = LetterStatus.initial,
+    required this.code,
+    this.status = CharacterStatus.initial,
+    this.onTap,
     super.key,
   });
 
@@ -99,34 +98,37 @@ class LetterField extends StatelessWidget {
       );
     }
 
-    return Container(
-      decoration: decoration,
-      padding: const EdgeInsets.all(2),
-      height: 52,
-      width: 24,
-      child: Column(
-        children: [
-          Text(
-            status.isCorrect ? value : '',
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.8,
+    return GestureDetector(
+      onTap: status.isCorrect ? null : onTap,
+      child: Container(
+        decoration: decoration,
+        padding: const EdgeInsets.all(2),
+        height: 52,
+        width: 24,
+        child: Column(
+          children: [
+            Text(
+              status.isCorrect ? value : '',
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 0.8,
+              ),
             ),
-          ),
-          const Divider(
-            color: Colors.black54,
-            thickness: 2,
-            height: 1,
-          ),
-          Text(
-            status.isCorrect ? '' : encryptedValue,
-            style: const TextStyle(
-              fontSize: 10,
-              letterSpacing: 0.8,
+            const Divider(
+              color: Colors.black54,
+              thickness: 2,
+              height: 1,
             ),
-          ),
-        ],
+            Text(
+              code,
+              style: const TextStyle(
+                fontSize: 10,
+                letterSpacing: 0.8,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
